@@ -5,15 +5,15 @@ from matplotlib import pyplot
 def fator_boltzmann(dif_energia,temperatura):
     return math.e**(-dif_energia/temperatura)
 
-#definir a funcao a ser otimizada
+#####################funcoes para teste#####################
 
 #funcao (x-4)^2+(y+3)^2+(z-3)^2:     (Min Global em[4,-3,3] e energia min = 0)
 """def funcao(lista_param):
     return (lista_param[0]-4)**2+(lista_param[1]+3)**2+(lista_param[2]-3)**2"""
 
 #funcao de Rosenbrock:     (Min Global em [1,1] e energia min = 0)
-def funcao(lista_param):
-    return (1-lista_param[0])**2+100*(lista_param[1]-lista_param[0]**2)**2
+"""def funcao(lista_param):
+    return (1-lista_param[0])**2+100*(lista_param[1]-lista_param[0]**2)**2"""
 
 #funcao de Matyas:     (Min Global em [0,0] e energia min = 0) ({-10 <= x,y <= 10})
 """def funcao(lista_param):
@@ -26,13 +26,15 @@ def funcao(lista_param):
     return (100*math.sqrt(abs(y-0.01*x**2))+0.01*abs(x+10))"""
 
 #funcao McCormick:     (Min Global em [-0.54719,-1.54719] e energia min = -1.9133) ({-1.5 < x <= 4} e {-3 <= y <= 4})
-"""def funcao(lista_param):
+def funcao(lista_param):
     x = lista_param[0]
     y = lista_param[1]
-    return (math.sin(x+y)+(x-y)**2-1.5*x+2.5*y+1)"""
+    return (math.sin(x+y)+(x-y)**2-1.5*x+2.5*y+1)
 
-def simulated_annealing(temp_inicial,max_iteracoes,temp_final,fator_decaimento,param_iniciais,step):
-    """Entradas: temperatura inicial, maximo de iteracoes, temperatura final, fator de decaimento, parametros iniciais, step
+
+
+def simulated_annealing(temp_inicial,max_iteracoes,temp_final,fator_decaimento,param_iniciais,intervalo):
+    """Entradas: temperatura inicial, maximo de iteracoes, temperatura final, fator de decaimento, parametros iniciais, matriz com os intervalos das entradas
     \nSaidas: lista dos melhores valores de cada iteracao, energia de cada iteracao, lista de 0 ate iteracao maxima, menor energia encontrada
     """
     e_inicial = funcao(param_iniciais)
@@ -51,7 +53,7 @@ def simulated_annealing(temp_inicial,max_iteracoes,temp_final,fator_decaimento,p
             param_atual = param_iniciais.copy()
             
             indice = np.random.randint(0,len(param_iniciais))
-            candidato = param_atual[indice] + np.random.uniform(-step,step)
+            candidato = np.random.uniform(intervalo[indice][0],intervalo[indice][1])
             
             param_atual[indice] = candidato
 
@@ -103,9 +105,21 @@ def simulated_annealing(temp_inicial,max_iteracoes,temp_final,fator_decaimento,p
 
     return(lista_resultados,lista_energias,eixo_h,lista_energias[indice_otimizacao])
 
+#exemplo de utilizacao:
 
+x = np.random.uniform(-1.5 , 4)
+y = np.random.uniform(-3 , 4)
 
-#teste dos resultados:
+resultados , energias , eixo_x , menor = simulated_annealing(1000,1000,1,0.9,[x,y],[[-1.5 , 4] , [-3,4]])
+pyplot.figure()
+pyplot.subplot(2,1,1)
+pyplot.plot(eixo_x,energias)
+pyplot.subplot(2,1,2)
+pyplot.plot(eixo_x,resultados[0],'-g')
+pyplot.plot(eixo_x,resultados[1],'-r') 
+pyplot.show()
+
+############teste dos resultados:################
 maior_1 = True
 
 while maior_1:
