@@ -120,7 +120,7 @@ pyplot.plot(eixo_x,resultados[1],'-r')
 pyplot.show()
 
 ############teste dos resultados:################
-maior_1 = True
+"""maior_1 = True
 
 while maior_1:
     x , y = np.random.randint(-10,10,size=2)
@@ -148,4 +148,4 @@ while maior_1:
         pyplot.plot(x,resultados[1],'-r')
         print("\n")
 
-pyplot.show()
+pyplot.show()"""
